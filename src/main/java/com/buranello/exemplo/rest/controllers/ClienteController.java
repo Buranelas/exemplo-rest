@@ -3,6 +3,7 @@ package com.buranello.exemplo.rest.controllers;
 import dto.ClienteFindAllResponse;
 import dto.ClienteRequest;
 import exceptions.ValidacaoException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
@@ -21,6 +22,7 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import models.Cliente;
@@ -33,6 +35,9 @@ import service.ClienteService;
 @Path("cliente")
 @Produces(MediaType.APPLICATION_JSON)
 public class ClienteController {
+    
+     private static final Logger LOGGER = 
+            Logger.getLogger(ClienteController.class.getName());
     
 //    @GET
 //    @Path(value = "ping")
@@ -52,8 +57,8 @@ public class ClienteController {
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response insert(ClienteRequest cliente) throws 
-            ValidacaoException, SQLException, NamingException{
+    public Response insert(ClienteRequest cliente, 
+            @Context HttpServletRequest request){
         //Passar pela camada de service
         try{
             ClienteService clienteService = new ClienteService();
@@ -66,10 +71,14 @@ public class ClienteController {
         ).build();
         
         }catch(ValidacaoException validacaoException){
+            
+            LOGGER.log(Level.INFO, validacaoException.toString());
             return Response.status(Response.Status.BAD_REQUEST). 
                     entity(validacaoException).build();
+            
         }catch(SQLException | NamingException ex){
             
+            LOGGER.log(Level.SEVERE, ex.toString());
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).
                     entity(new ValidacaoException
         ("Algo deu errado, tente novamente mais tarde")).build();

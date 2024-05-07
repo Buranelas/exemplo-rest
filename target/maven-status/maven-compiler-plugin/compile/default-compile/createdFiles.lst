@@ -1,0 +1,10 @@
+com\buranello\exemplo\rest\ExemploRestApplication.class
+service\ClienteService.class
+dto\ClienteFindAllResponse.class
+com\buranello\exemplo\rest\controllers\ClienteController.class
+dto\ClienteRequest.class
+models\Cliente.class
+dto\ClienteResponse.class
+infrestructure\ConnectionFactory.class
+exceptions\ValidacaoException.class
+repositories\ClienteRepository.class

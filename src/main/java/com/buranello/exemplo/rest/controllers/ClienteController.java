@@ -61,9 +61,10 @@ public class ClienteController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insert(ClienteRequest cliente, 
-            @Context HttpServletRequest request){
+            @Context HttpServletRequest request) throws ValidacaoException, 
+            SQLException, NamingException{
         //Passar pela camada de service
-        try{
+//        try{
             ClienteService clienteService = new ClienteService();
         Cliente clienteDomain = 
                 clienteService.insert(Cliente.requestToCliente(cliente));
@@ -73,27 +74,28 @@ public class ClienteController {
                         clienteDomain.getId())
         ).build();
         
-        }catch(ValidacaoException validacaoException){
-            
-            LOGGER.log(Level.INFO, validacaoException.toString());
-            return Response.status(Response.Status.BAD_REQUEST). 
-                    entity(validacaoException).build();
-            
-        }catch(SQLException | NamingException ex){
-            
-            LOGGER.log(Level.SEVERE, ex.toString());
-            
-            ExceptionResponse response = 
-                    new ExceptionResponse("Ops, algo ocorreu de errado, tente novamente mais tarde", 
-                            new Date(0), 
-                            request.getRequestURI(), 
-                            Response.Status.INTERNAL_SERVER_ERROR.toString());
-            
-            return Response.
-                    status(Response.Status.INTERNAL_SERVER_ERROR).
-                    entity(response).build();
-        }
-        
+ //       }
+ //       catch(ValidacaoException validacaoException){
+ //           
+ //           LOGGER.log(Level.INFO, validacaoException.toString());
+ //           return Response.status(Response.Status.BAD_REQUEST). 
+ //                   entity(validacaoException).build();
+ //           
+ //       }catch(SQLException | NamingException ex){
+ //           
+ //           LOGGER.log(Level.SEVERE, ex.toString());
+ //           
+ //           ExceptionResponse response = 
+ //                   new ExceptionResponse("Ops, algo ocorreu de errado, tente novamente mais tarde", 
+ //                           new Date(0), 
+ //                           request.getRequestURI(), 
+ //                           Response.Status.INTERNAL_SERVER_ERROR.toString());
+ //           
+ //           return Response.
+ //                   status(Response.Status.INTERNAL_SERVER_ERROR).
+ //                   entity(response).build();
+ //       }
+ //       
     }
     
     @GET
